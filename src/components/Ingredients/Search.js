@@ -11,7 +11,7 @@ const Search = React.memo(props => {
     const query = 
     enteredFilter.length === 0 
     ? '' 
-    : `?orderBy="title"&equalTo="${enteredFilter}`;
+    : `?orderBy="title"&equalTo="${enteredFilter}"`;
     fetch('https://hookspracticev2-default-rtdb.firebaseio.com/ingredients.json'+query)
     .then( response => response.json())
     .then( responseData => {
@@ -23,7 +23,7 @@ const Search = React.memo(props => {
           amount:responseData[key].amount
         });
       }
-     // onLoadIngredients(loadedIgredients);
+      onLoadIngredients(loadedIgredients);
     })
   } , [enteredFilter, onLoadIngredients]);
 
