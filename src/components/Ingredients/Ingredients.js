@@ -11,6 +11,9 @@ const Ingredients = () => {
     console.log('RENDERING INGREDIENTS', userIngredients);
   }, [userIngredients])
 
+  //usecallback to the filteredingredientshandler so that it 
+  //doesnt render again and again on executing because it 
+  //also causes  rerender
   const filteredIngredientsHandler = useCallback(filteredIngredients => {
     setUserIngredients(filteredIngredients);
   } , [])
