@@ -22,6 +22,14 @@ const Ingredients = () => {
     })
   } , []);
 
+  useEffect( () => {
+    console.log('RENDERING INGREDIENTS', userIngredients);
+  }, [userIngredients])
+
+  const filteredIngredientsHandler = filteredIngredients => {
+    setUserIngredients(filteredIngredients);
+  }
+
   const onAddIngredientHandler = ingredient => {
     fetch('https://hookspracticev2-default-rtdb.firebaseio.com/ingredients.json' , {
       method:'POST',
@@ -41,7 +49,7 @@ const Ingredients = () => {
     <div className="App">
       <IngredientForm onAddIngredient= {onAddIngredientHandler} />
       <section>
-        <Search />
+        <Search onLoadIngredients={filteredIngredientsHandler} />
         <IngredientList ingredients={userIngredients} onRemoveItem={ () => {}}/>
       </section>
     </div>
