@@ -28,10 +28,8 @@ const Ingredients = () => {
     sendRequest,
     reqExtra,
     reqIdentifier,
+    clear,
   } = useHttp();
-  //const [userIngredients, setUserIngredients] = useState([]);
-  //const [isLoading, setIsLoading] = useState(false);
-  //const [error, setError] = useState();
 
   useEffect(() => {
     if (!isLoading && !error && reqIdentifier === "REMOVE_INGREDIENT") {
@@ -42,50 +40,27 @@ const Ingredients = () => {
         ingredient: { id: data.name, ...reqExtra },
       });
     }
-  }, [data, reqExtra, reqIdentifier, isLoading]);
+  }, [data, reqExtra, reqIdentifier, isLoading, error]);
 
   //usecallback to the filteredingredientshandler so that it
   //doesnt render again and again on executing because it
   //also causes  rerender
   const filteredIngredientsHandler = useCallback((filteredIngredients) => {
-    // setUserIngredients(filteredIngredients);
     dispatch({ type: "SET", ingredients: filteredIngredients });
   }, []);
 
-  const onAddIngredientHandler = useCallback((ingredient) => {
-    sendRequest(
-      "https://hookspracticev2-default-rtdb.firebaseio.com/ingredients.json",
-      "POST",
-      JSON.stringify(ingredient),
-      ingredient,
-      "ADD_INGREDIENT"
-    );
-    //setIsLoading(true);
-    // dispatchHttp({ type: "SEND" });
-    // fetch(
-    //   "https://hookspracticev2-default-rtdb.firebaseio.com/ingredients.json",
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify(ingredient),
-    //     headers: { "Content-Type": "application/json" },
-    //   }
-    // )
-    //   .then((response) => {
-    //     //setIsLoading(false);
-    //     dispatchHttp({ type: "RESPONSE" });
-    //     return response.json();
-    //   })
-    //   .then((responseData) => {
-    //     // setUserIngredients((prevIngredients) => [
-    //     //   ...prevIngredients,
-    //     //   { id: responseData.name, ...ingredient },
-    //     // ]);
-    //     dispatch({
-    //       type: "ADD",
-    //       ingredient: { id: responseData.name, ...ingredient },
-    //     });
-    //   });
-  }, []);
+  const onAddIngredientHandler = useCallback(
+    (ingredient) => {
+      sendRequest(
+        "https://hookspracticev2-default-rtdb.firebaseio.com/ingredients.json",
+        "POST",
+        JSON.stringify(ingredient),
+        ingredient,
+        "ADD_INGREDIENT"
+      );
+    },
+    [sendRequest]
+  );
 
   const removeIngredientHandler = useCallback(
     (ingredientId) => {
@@ -100,10 +75,6 @@ const Ingredients = () => {
     [sendRequest]
   );
 
-  const clearError = useCallback(() => {
-    // dispatchHttp({ type: "CLEAR" });
-  }, []);
-
   const ingredientList = useMemo(
     () => (
       <IngredientList
@@ -116,7 +87,7 @@ const Ingredients = () => {
 
   return (
     <div className="App">
-      {error ? <ErrorModal onClose={clearError}>{error}</ErrorModal> : null}
+      {error ? <ErrorModal onClose={clear}>{error}</ErrorModal> : null}
       <IngredientForm
         onAddIngredient={onAddIngredientHandler}
         loading={isLoading}
